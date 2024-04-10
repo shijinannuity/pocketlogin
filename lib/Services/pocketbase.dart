@@ -16,15 +16,9 @@ class PocketBaseAuthClass {
     try {
       pb = PocketBase('http://10.0.2.2:8090/', authStore: authStore);
       print("pb auth:${pb.authStore.model}");
-      // print("Pb authstore:${pb.authStore.model.id ?? " "}");
     } catch (e) {
       print("Error inside custom auth;${e.toString()}");
     }
-
-    // if (pb.authStore.isValid) {
-    //   final authRecord = await pb.collection('users').authRefresh();
-    //   print(authRecord);
-    // }
   }
 
   initAuthStore() async {
@@ -47,10 +41,6 @@ class PocketBaseAuthClass {
   }
 
   String _username = "";
-  // bool get isAuth {
-  //   print("pb:: ${pb.authStore.isValid} &&  ${pb.authStore.token.isNotEmpty}");
-  //   return pb.authStore.isValid && pb.authStore.token.isNotEmpty;
-  // }
 
   String get username => _username;
   Future<bool> signup(String name, String password, String confirmpassword,
@@ -62,8 +52,9 @@ class PocketBaseAuthClass {
       "password": password,
       "passwordConfirm": password,
       "name": name,
+
       ///"profile is used to set type of user(User or admin) please add a variable which decide user according to the login form"
-      "profile":"admin"
+      "profile": "admin"
     };
     late final record;
     try {
@@ -80,7 +71,6 @@ class PocketBaseAuthClass {
     try {
       final body = {"email": email};
       final res = await pb.send("/mailMFA", method: "POST", body: body);
-      // print("Res:${res.toString()}");
       return res['id'];
     } catch (e) {
       return null;
@@ -97,7 +87,6 @@ class PocketBaseAuthClass {
     late final res;
     try {
       res = await pb.send("/mailverification", body: body);
-      // print("Res:${res.toString()}");
     } catch (error) {
       print(error);
       err = true;
@@ -112,7 +101,7 @@ class PocketBaseAuthClass {
   Future<bool> checkemailnotexist(String email) async {
     bool res = false;
     final rec;
-    // print("Email exist inside:CHECKING");
+
     try {
       rec = await pb.collection("users").getFullList();
       res = rec.any((element) => element.data['email'] == email);
